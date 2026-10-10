@@ -178,6 +178,15 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  // Catégorie actuellement sélectionnée (la première par défaut)
+  String _categorieSelectionnee = categories[0];
+
+  void _selectionnerCategorie(String categorie) {
+    setState(() {
+      _categorieSelectionnee = categorie;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,10 +196,35 @@ class _MenuPageState extends State<MenuPage> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 60,
-            alignment: Alignment.center,
-            child: const Text('Catégories'),
+          //bar catégories
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                //un btn par catégorie de la liste
+                for (String categorie in categories)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: ElevatedButton(
+                      onPressed: () => _selectionnerCategorie(categorie),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        //passage de la categorie tap en orange
+                        backgroundColor: categorie == _categorieSelectionnee
+                            ? Colors.orange
+                            : Colors.grey[200],
+                        foregroundColor: categorie == _categorieSelectionnee
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      child: Text(categorie),
+                    ),
+                  ),
+              ],
+            ),
           ),
           const Expanded(
             child: Center(
