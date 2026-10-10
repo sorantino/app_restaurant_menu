@@ -226,9 +226,87 @@ class _MenuPageState extends State<MenuPage> {
               ],
             ),
           ),
-          const Expanded(
-            child: Center(
-              child: Text('Plats'),
+          PlatCard(plat: plats[0]),
+        ],
+      ),
+    );
+  }
+}
+
+//carte réutilisable pour les plats
+class PlatCard extends StatelessWidget {
+  const PlatCard({super.key, required this.plat});
+
+  final Plat plat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.all(10),
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.network(
+            plat.image,
+            height: 150,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            //affiche une icone si l'image ne charge pas
+            errorBuilder: (context, error, stackTrace) => Container(
+              height: 150,
+              color: Colors.grey[300],
+              child: const Center(child: Icon(Icons.restaurant, size: 50)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        plat.nom,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '${plat.prix.toStringAsFixed(2).replaceAll('.', ',')} €',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  plat.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
+              ],
             ),
           ),
         ],
