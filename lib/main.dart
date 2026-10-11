@@ -202,6 +202,9 @@ class _MenuPageState extends State<MenuPage> {
         .where((plat) => plat.categorie == _categorieSelectionnee)
         .toList();
 
+    final bool paysage =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -238,13 +241,26 @@ class _MenuPageState extends State<MenuPage> {
               ],
             ),
           ),
+          //layout responsive : en protrait une carte par ligne et en paysage 2 cartes cote à cote
           Expanded(
-            child: ListView.builder(
-              itemCount: platsFiltres.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PlatCard(plat: platsFiltres[index]);
-              },
-            ),
+            child: paysage
+                ? GridView.builder(
+                    itemCount: platsFiltres.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: 270,
+                        ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return PlatCard(plat: platsFiltres[index]);
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: platsFiltres.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return PlatCard(plat: platsFiltres[index]);
+                    },
+                  ),
           ),
         ],
       ),
@@ -260,10 +276,6 @@ class PlatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //détection mode paysage
-    final double hauteurImage =
-        MediaQuery.of(context).orientation == Orientation.landscape ? 100 : 150;
-
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 4,
@@ -275,12 +287,12 @@ class PlatCard extends StatelessWidget {
         children: [
           Image.network(
             plat.image,
-            height: hauteurImage,
+            height: 150,
             width: double.infinity,
             fit: BoxFit.cover,
             //affiche une icone si l'image ne charge pas
             errorBuilder: (context, error, stackTrace) => Container(
-              height: hauteurImage,
+              height: 150,
               color: Colors.grey[300],
               child: const Center(child: Icon(Icons.restaurant, size: 50)),
             ),
@@ -295,6 +307,8 @@ class PlatCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         plat.nom,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
