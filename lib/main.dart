@@ -260,6 +260,10 @@ class PlatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //détection mode paysage
+    final double hauteurImage =
+        MediaQuery.of(context).orientation == Orientation.landscape ? 100 : 150;
+
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 4,
@@ -271,12 +275,12 @@ class PlatCard extends StatelessWidget {
         children: [
           Image.network(
             plat.image,
-            height: 150,
+            height: hauteurImage,
             width: double.infinity,
             fit: BoxFit.cover,
             //affiche une icone si l'image ne charge pas
             errorBuilder: (context, error, stackTrace) => Container(
-              height: 150,
+              height: hauteurImage,
               color: Colors.grey[300],
               child: const Center(child: Icon(Icons.restaurant, size: 50)),
             ),
